@@ -1,0 +1,1301 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="initial-scale=1,user-scalable=no,maximum-scale=1,width=device-width">
+        <meta name="mobile-web-app-capable" content="yes">
+        <meta name="apple-mobile-web-app-capable" content="yes">
+        <link rel="stylesheet" href="css/leaflet.css">
+        <link rel="stylesheet" href="css/qgis2web.css"><link rel="stylesheet" href="css/fontawesome-all.min.css">
+        <link rel="stylesheet" href="css/leaflet-search.css">
+        <link rel="stylesheet" href="css/filter.css">
+<link rel="stylesheet" href="css/nouislider.min.css">
+        <link rel="stylesheet" href="css/leaflet-measure.css">
+        <style>
+        html, body, #map {
+            width: 100%;
+            height: 100%;
+            padding: 0;
+            margin: 0;
+        }
+        </style>
+        <title></title>
+    </head>
+    <body>
+        <div id="map">
+        </div>
+        <script src="js/qgis2web_expressions.js"></script>
+        <script src="js/leaflet.js"></script>
+        <script src="js/leaflet.rotatedMarker.js"></script>
+        <script src="js/leaflet.pattern.js"></script>
+        <script src="js/leaflet-hash.js"></script>
+        <script src="js/Autolinker.min.js"></script>
+        <script src="js/rbush.min.js"></script>
+        <script src="js/labelgun.min.js"></script>
+        <script src="js/labels.js"></script>
+        <script src="js/leaflet-measure.js"></script>
+        <script src="js/proj4.js"></script>
+        <script src="js/proj4leaflet.js"></script>
+        <script src="js/leaflet-search.js"></script>
+        <script src="js/tailDT.js"></script>
+<script src="js/nouislider.min.js"></script>
+<script src="js/wNumb.js"></script>
+        <script src="data/Regions_v1_0.js"></script>
+        <script src="data/GridOverlay_1.js"></script>
+        <script>
+        var crs = new L.Proj.CRS('ESRI:54009', '+proj=moll +lon_0=0 +x_0=0 +y_0=0 +datum=WGS84 +units=m +no_defs', {
+            resolutions: [2800, 1400, 700, 350, 175, 84, 42, 21, 11.2, 5.6, 2.8, 1.4, 0.7, 0.35, 0.14, 0.07],
+        });
+        var map = L.map('map', {
+            crs: crs,
+            continuousWorld: false,
+            worldCopyJump: false, 
+            zoomControl:true, maxZoom:28, minZoom:1
+        })
+        var hash = new L.Hash(map);
+        map.attributionControl.setPrefix('<a href="https://github.com/tomchadwin/qgis2web" target="_blank">qgis2web</a> &middot; <a href="https://leafletjs.com" title="A JS library for interactive maps">Leaflet</a> &middot; <a href="https://qgis.org">QGIS</a>');
+        var autolinker = new Autolinker({truncate: {length: 30, location: 'smart'}});
+        var measureControl = new L.Control.Measure({
+            position: 'topleft',
+            primaryLengthUnit: 'meters',
+            secondaryLengthUnit: 'kilometers',
+            primaryAreaUnit: 'sqmeters',
+            secondaryAreaUnit: 'hectares'
+        });
+        measureControl.addTo(map);
+        document.getElementsByClassName('leaflet-control-measure-toggle')[0]
+        .innerHTML = '';
+        document.getElementsByClassName('leaflet-control-measure-toggle')[0]
+        .className += ' fas fa-ruler';
+        var bounds_group = new L.featureGroup([]);
+        function setBounds() {
+            if (bounds_group.getLayers().length) {
+                map.fitBounds(bounds_group.getBounds());
+            }
+            map.setMaxBounds(map.getBounds());
+        }
+        function pop_Regions_v1_0(feature, layer) {
+            var popupContent = '<table>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['Origin'] !== null ? autolinker.link(feature.properties['Origin'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['Province'] !== null ? autolinker.link(feature.properties['Province'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2"><strong>Region</strong><br />' + (feature.properties['Region'] !== null ? autolinker.link(feature.properties['Region'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['Status'] !== null ? autolinker.link(feature.properties['Status'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                </table>';
+            layer.bindPopup(popupContent, {maxHeight: 400});
+        }
+
+        function style_Regions_v1_0_0(feature) {
+            switch(String(feature.properties['Region'])) {
+                case 'Aanthirin':
+                    return {
+                pane: 'pane_Regions_v1_0',
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(140,188,227,1.0)',
+                interactive: true,
+            }
+                    break;
+                case 'Abecean Sea':
+                    return {
+                pane: 'pane_Regions_v1_0',
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(113,201,215,1.0)',
+                interactive: true,
+            }
+                    break;
+                case 'Alt Orethan':
+                    return {
+                pane: 'pane_Regions_v1_0',
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(203,207,218,1.0)',
+                interactive: true,
+            }
+                    break;
+                case 'Armun Ashlands':
+                    return {
+                pane: 'pane_Regions_v1_0',
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(166,166,166,1.0)',
+                interactive: true,
+            }
+                    break;
+                case 'Arnesian Jungle':
+                    return {
+                pane: 'pane_Regions_v1_0',
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(85,182,92,1.0)',
+                interactive: true,
+            }
+                    break;
+                case 'Ascadian Isles':
+                    return {
+                pane: 'pane_Regions_v1_0',
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(128,224,64,1.0)',
+                interactive: true,
+            }
+                    break;
+                case 'Ashlands':
+                    return {
+                pane: 'pane_Regions_v1_0',
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(193,193,193,1.0)',
+                interactive: true,
+            }
+                    break;
+                case 'Azuras Coast':
+                    return {
+                pane: 'pane_Regions_v1_0',
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(243,255,96,1.0)',
+                interactive: true,
+            }
+                    break;
+                case 'Bitter Coast':
+                    return {
+                pane: 'pane_Regions_v1_0',
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(89,93,255,1.0)',
+                interactive: true,
+            }
+                    break;
+                case 'Boethiahs Spire':
+                    return {
+                pane: 'pane_Regions_v1_0',
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(180,176,156,1.0)',
+                interactive: true,
+            }
+                    break;
+                case 'Brodir Grove':
+                    return {
+                pane: 'pane_Regions_v1_0',
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(163,252,216,1.0)',
+                interactive: true,
+            }
+                    break;
+                case 'Clambering Moor':
+                    return {
+                pane: 'pane_Regions_v1_0',
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(187,188,255,1.0)',
+                interactive: true,
+            }
+                    break;
+                case 'Colovian Highlands':
+                    return {
+                pane: 'pane_Regions_v1_0',
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(214,202,154,1.0)',
+                interactive: true,
+            }
+                    break;
+                case 'Deshaan Plains':
+                    return {
+                pane: 'pane_Regions_v1_0',
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(233,174,158,1.0)',
+                interactive: true,
+            }
+                    break;
+                case 'Druadach Highlands':
+                    return {
+                pane: 'pane_Regions_v1_0',
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(72,188,49,1.0)',
+                interactive: true,
+            }
+                    break;
+                case 'Falkheim':
+                    return {
+                pane: 'pane_Regions_v1_0',
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(207,169,97,1.0)',
+                interactive: true,
+            }
+                    break;
+                case 'Felsaad Coast':
+                    return {
+                pane: 'pane_Regions_v1_0',
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(236,236,214,1.0)',
+                interactive: true,
+            }
+                    break;
+                case 'Firemoth':
+                    return {
+                pane: 'pane_Regions_v1_0',
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(212,99,140,1.0)',
+                interactive: true,
+            }
+                    break;
+                case 'Gilded Hills':
+                    return {
+                pane: 'pane_Regions_v1_0',
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(190,161,129,1.0)',
+                interactive: true,
+            }
+                    break;
+                case 'Grazelands':
+                    return {
+                pane: 'pane_Regions_v1_0',
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(255,197,88,1.0)',
+                interactive: true,
+            }
+                    break;
+                case 'Grey Meadows':
+                    return {
+                pane: 'pane_Regions_v1_0',
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(208,208,208,1.0)',
+                interactive: true,
+            }
+                    break;
+                case 'Helnim Fields':
+                    return {
+                pane: 'pane_Regions_v1_0',
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(242,227,181,1.0)',
+                interactive: true,
+            }
+                    break;
+                case 'Hirstaang Forest':
+                    return {
+                pane: 'pane_Regions_v1_0',
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(160,160,64,1.0)',
+                interactive: true,
+            }
+                    break;
+                case 'Isinfier Plains':
+                    return {
+                pane: 'pane_Regions_v1_0',
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(247,218,185,1.0)',
+                interactive: true,
+            }
+                    break;
+                case 'Julan-Shar':
+                    return {
+                pane: 'pane_Regions_v1_0',
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(126,81,24,1.0)',
+                interactive: true,
+            }
+                    break;
+                case 'Kilkreath Mountains':
+                    return {
+                pane: 'pane_Regions_v1_0',
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(90,69,69,1.0)',
+                interactive: true,
+            }
+                    break;
+                case 'Kvethchi Pass':
+                    return {
+                pane: 'pane_Regions_v1_0',
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(149,120,122,1.0)',
+                interactive: true,
+            }
+                    break;
+                case 'Lan Orethan':
+                    return {
+                pane: 'pane_Regions_v1_0',
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(86,188,98,1.0)',
+                interactive: true,
+            }
+                    break;
+                case 'Mephalan Vales':
+                    return {
+                pane: 'pane_Regions_v1_0',
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(158,179,138,1.0)',
+                interactive: true,
+            }
+                    break;
+                case 'Midkarth':
+                    return {
+                pane: 'pane_Regions_v1_0',
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(97,207,164,1.0)',
+                interactive: true,
+            }
+                    break;
+                case 'Moesring Mountains':
+                    return {
+                pane: 'pane_Regions_v1_0',
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(64,255,255,1.0)',
+                interactive: true,
+            }
+                    break;
+                case 'Molag Amur':
+                    return {
+                pane: 'pane_Regions_v1_0',
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(139,139,139,1.0)',
+                interactive: true,
+            }
+                    break;
+                case 'Molaghread':
+                    return {
+                pane: 'pane_Regions_v1_0',
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(202,77,143,1.0)',
+                interactive: true,
+            }
+                    break;
+                case 'Nedothril':
+                    return {
+                pane: 'pane_Regions_v1_0',
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(230,180,89,1.0)',
+                interactive: true,
+            }
+                    break;
+                case 'Old Ebonheart':
+                    return {
+                pane: 'pane_Regions_v1_0',
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(131,66,79,1.0)',
+                interactive: true,
+            }
+                    break;
+                case 'Othreleth Woods':
+                    return {
+                pane: 'pane_Regions_v1_0',
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(226,191,71,1.0)',
+                interactive: true,
+            }
+                    break;
+                case 'Red Mountain':
+                    return {
+                pane: 'pane_Regions_v1_0',
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(239,98,98,1.0)',
+                interactive: true,
+            }
+                    break;
+                case 'Roth-Roryn':
+                    return {
+                pane: 'pane_Regions_v1_0',
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(149,119,110,1.0)',
+                interactive: true,
+            }
+                    break;
+                case 'Sacred Lands':
+                    return {
+                pane: 'pane_Regions_v1_0',
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(234,80,239,1.0)',
+                interactive: true,
+            }
+                    break;
+                case 'Salt Marshes':
+                    return {
+                pane: 'pane_Regions_v1_0',
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(170,244,183,1.0)',
+                interactive: true,
+            }
+                    break;
+                case 'Sheogorad':
+                    return {
+                pane: 'pane_Regions_v1_0',
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(160,83,179,1.0)',
+                interactive: true,
+            }
+                    break;
+                case 'Shipal Shin':
+                    return {
+                pane: 'pane_Regions_v1_0',
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(179,156,125,1.0)',
+                interactive: true,
+            }
+                    break;
+                case 'Solitude Forest':
+                    return {
+                pane: 'pane_Regions_v1_0',
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(8,88,35,1.0)',
+                interactive: true,
+            }
+                    break;
+                case 'Soluthis':
+                    return {
+                pane: 'pane_Regions_v1_0',
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(131,66,79,1.0)',
+                interactive: true,
+            }
+                    break;
+                case 'Sundered Hills':
+                    return {
+                pane: 'pane_Regions_v1_0',
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(124,119,81,1.0)',
+                interactive: true,
+            }
+                    break;
+                case 'Sundered Scar':
+                    return {
+                pane: 'pane_Regions_v1_0',
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(139,158,93,1.0)',
+                interactive: true,
+            }
+                    break;
+                case 'Thirr Valley':
+                    return {
+                pane: 'pane_Regions_v1_0',
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(241,218,140,1.0)',
+                interactive: true,
+            }
+                    break;
+                case 'Thirsk':
+                    return {
+                pane: 'pane_Regions_v1_0',
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(254,174,65,1.0)',
+                interactive: true,
+            }
+                    break;
+                case 'Uld Vraech':
+                    return {
+                pane: 'pane_Regions_v1_0',
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(104,222,235,1.0)',
+                interactive: true,
+            }
+                    break;
+                case 'Valstaah Highlands':
+                    return {
+                pane: 'pane_Regions_v1_0',
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(142,193,132,1.0)',
+                interactive: true,
+            }
+                    break;
+                case 'Velothi Mountains':
+                    return {
+                pane: 'pane_Regions_v1_0',
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(64,64,255,1.0)',
+                interactive: true,
+            }
+                    break;
+                case 'West Gash':
+                    return {
+                pane: 'pane_Regions_v1_0',
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(175,154,125,1.0)',
+                interactive: true,
+            }
+                    break;
+                case 'Stirk Isles':
+                    return {
+                pane: 'pane_Regions_v1_0',
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(216,205,116,1.0)',
+                interactive: true,
+            }
+                    break;
+                case 'Aranyon Pass':
+                    return {
+                pane: 'pane_Regions_v1_0',
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(152,138,122,1.0)',
+                interactive: true,
+            }
+                    break;
+                case 'Telvanni Isles':
+                    return {
+                pane: 'pane_Regions_v1_0',
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(194,191,86,1.0)',
+                interactive: true,
+            }
+                    break;
+                case 'Padomaic Ocean':
+                    return {
+                pane: 'pane_Regions_v1_0',
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(80,147,203,1.0)',
+                interactive: true,
+            }
+                    break;
+                case 'Sea of Ghosts':
+                    return {
+                pane: 'pane_Regions_v1_0',
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(101,188,186,1.0)',
+                interactive: true,
+            }
+                    break;
+                case 'Mudflats':
+                    return {
+                pane: 'pane_Regions_v1_0',
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(160,112,64,1.0)',
+                interactive: true,
+            }
+                    break;
+                case 'Ascadian Bluffs':
+                    return {
+                pane: 'pane_Regions_v1_0',
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(160,160,255,1.0)',
+                interactive: true,
+            }
+                    break;
+                case 'Gold Coast':
+                    return {
+                pane: 'pane_Regions_v1_0',
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(245,239,177,1.0)',
+                interactive: true,
+            }
+                    break;
+                default:
+                    return {
+                pane: 'pane_Regions_v1_0',
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 2.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(234,212,145,1.0)',
+                interactive: true,
+            }
+                    break;
+            }
+        }
+        map.createPane('pane_Regions_v1_0');
+        map.getPane('pane_Regions_v1_0').style.zIndex = 400;
+        map.getPane('pane_Regions_v1_0').style['mix-blend-mode'] = 'normal';
+        var layer_Regions_v1_0 = new L.geoJson(json_Regions_v1_0, {
+            attribution: '',
+            interactive: true,
+            dataVar: 'json_Regions_v1_0',
+            layerName: 'layer_Regions_v1_0',
+            pane: 'pane_Regions_v1_0',
+            onEachFeature: pop_Regions_v1_0,
+            style: style_Regions_v1_0_0,
+        });
+        bounds_group.addLayer(layer_Regions_v1_0);
+        map.addLayer(layer_Regions_v1_0);
+        function pop_GridOverlay_1(feature, layer) {
+            var popupContent = '<table>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['fid'] !== null ? autolinker.link(feature.properties['fid'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['id'] !== null ? autolinker.link(feature.properties['id'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['left'] !== null ? autolinker.link(feature.properties['left'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['top'] !== null ? autolinker.link(feature.properties['top'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['right'] !== null ? autolinker.link(feature.properties['right'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['bottom'] !== null ? autolinker.link(feature.properties['bottom'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                </table>';
+            layer.bindPopup(popupContent, {maxHeight: 400});
+        }
+
+        function style_GridOverlay_1_0() {
+            return {
+                pane: 'pane_GridOverlay_1',
+                opacity: 1,
+                color: 'rgba(0,0,0,1.0)',
+                dashArray: '',
+                lineCap: 'square',
+                lineJoin: 'bevel',
+                weight: 1.0,
+                fillOpacity: 0,
+                interactive: false,
+            }
+        }
+        map.createPane('pane_GridOverlay_1');
+        map.getPane('pane_GridOverlay_1').style.zIndex = 401;
+        map.getPane('pane_GridOverlay_1').style['mix-blend-mode'] = 'normal';
+        var layer_GridOverlay_1 = new L.geoJson(json_GridOverlay_1, {
+            attribution: '',
+            interactive: false,
+            dataVar: 'json_GridOverlay_1',
+            layerName: 'layer_GridOverlay_1',
+            pane: 'pane_GridOverlay_1',
+            onEachFeature: pop_GridOverlay_1,
+            style: style_GridOverlay_1_0,
+        });
+        bounds_group.addLayer(layer_GridOverlay_1);
+        var baseMaps = {};
+        L.control.layers(baseMaps,{'<img src="legend/GridOverlay_1.png" /> GridOverlay': layer_GridOverlay_1,'Regions_v1<br /><table><tr><td style="text-align: center;"><img src="legend/Regions_v1_0_Aanthirin0.png" /></td><td>Aanthirin</td></tr><tr><td style="text-align: center;"><img src="legend/Regions_v1_0_AbeceanSea1.png" /></td><td>Abecean Sea</td></tr><tr><td style="text-align: center;"><img src="legend/Regions_v1_0_AltOrethan2.png" /></td><td>Alt Orethan</td></tr><tr><td style="text-align: center;"><img src="legend/Regions_v1_0_ArmunAshlands3.png" /></td><td>Armun Ashlands</td></tr><tr><td style="text-align: center;"><img src="legend/Regions_v1_0_ArnesianJungle4.png" /></td><td>Arnesian Jungle</td></tr><tr><td style="text-align: center;"><img src="legend/Regions_v1_0_AscadianIsles5.png" /></td><td>Ascadian Isles</td></tr><tr><td style="text-align: center;"><img src="legend/Regions_v1_0_Ashlands6.png" /></td><td>Ashlands</td></tr><tr><td style="text-align: center;"><img src="legend/Regions_v1_0_AzurasCoast7.png" /></td><td>Azuras Coast</td></tr><tr><td style="text-align: center;"><img src="legend/Regions_v1_0_BitterCoast8.png" /></td><td>Bitter Coast</td></tr><tr><td style="text-align: center;"><img src="legend/Regions_v1_0_BoethiahsSpire9.png" /></td><td>Boethiahs Spire</td></tr><tr><td style="text-align: center;"><img src="legend/Regions_v1_0_BrodirGrove10.png" /></td><td>Brodir Grove</td></tr><tr><td style="text-align: center;"><img src="legend/Regions_v1_0_ClamberingMoor11.png" /></td><td>Clambering Moor</td></tr><tr><td style="text-align: center;"><img src="legend/Regions_v1_0_ColovianHighlands12.png" /></td><td>Colovian Highlands</td></tr><tr><td style="text-align: center;"><img src="legend/Regions_v1_0_DeshaanPlains13.png" /></td><td>Deshaan Plains</td></tr><tr><td style="text-align: center;"><img src="legend/Regions_v1_0_DruadachHighlands14.png" /></td><td>Druadach Highlands</td></tr><tr><td style="text-align: center;"><img src="legend/Regions_v1_0_Falkheim15.png" /></td><td>Falkheim</td></tr><tr><td style="text-align: center;"><img src="legend/Regions_v1_0_FelsaadCoast16.png" /></td><td>Felsaad Coast</td></tr><tr><td style="text-align: center;"><img src="legend/Regions_v1_0_Firemoth17.png" /></td><td>Firemoth</td></tr><tr><td style="text-align: center;"><img src="legend/Regions_v1_0_GildedHills18.png" /></td><td>Gilded Hills</td></tr><tr><td style="text-align: center;"><img src="legend/Regions_v1_0_Grazelands19.png" /></td><td>Grazelands</td></tr><tr><td style="text-align: center;"><img src="legend/Regions_v1_0_GreyMeadows20.png" /></td><td>Grey Meadows</td></tr><tr><td style="text-align: center;"><img src="legend/Regions_v1_0_HelnimFields21.png" /></td><td>Helnim Fields</td></tr><tr><td style="text-align: center;"><img src="legend/Regions_v1_0_HirstaangForest22.png" /></td><td>Hirstaang Forest</td></tr><tr><td style="text-align: center;"><img src="legend/Regions_v1_0_IsinfierPlains23.png" /></td><td>Isinfier Plains</td></tr><tr><td style="text-align: center;"><img src="legend/Regions_v1_0_JulanShar24.png" /></td><td>Julan-Shar</td></tr><tr><td style="text-align: center;"><img src="legend/Regions_v1_0_KilkreathMountains25.png" /></td><td>Kilkreath Mountains</td></tr><tr><td style="text-align: center;"><img src="legend/Regions_v1_0_KvethchiPass26.png" /></td><td>Kvethchi Pass</td></tr><tr><td style="text-align: center;"><img src="legend/Regions_v1_0_LanOrethan27.png" /></td><td>Lan Orethan</td></tr><tr><td style="text-align: center;"><img src="legend/Regions_v1_0_MephalanVales28.png" /></td><td>Mephalan Vales</td></tr><tr><td style="text-align: center;"><img src="legend/Regions_v1_0_Midkarth29.png" /></td><td>Midkarth</td></tr><tr><td style="text-align: center;"><img src="legend/Regions_v1_0_MoesringMountains30.png" /></td><td>Moesring Mountains</td></tr><tr><td style="text-align: center;"><img src="legend/Regions_v1_0_MolagAmur31.png" /></td><td>Molag Amur</td></tr><tr><td style="text-align: center;"><img src="legend/Regions_v1_0_Molaghread32.png" /></td><td>Molaghread</td></tr><tr><td style="text-align: center;"><img src="legend/Regions_v1_0_Nedothril33.png" /></td><td>Nedothril</td></tr><tr><td style="text-align: center;"><img src="legend/Regions_v1_0_OldEbonheart34.png" /></td><td>Old Ebonheart</td></tr><tr><td style="text-align: center;"><img src="legend/Regions_v1_0_OthrelethWoods35.png" /></td><td>Othreleth Woods</td></tr><tr><td style="text-align: center;"><img src="legend/Regions_v1_0_RedMountain36.png" /></td><td>Red Mountain</td></tr><tr><td style="text-align: center;"><img src="legend/Regions_v1_0_RothRoryn37.png" /></td><td>Roth-Roryn</td></tr><tr><td style="text-align: center;"><img src="legend/Regions_v1_0_SacredLands38.png" /></td><td>Sacred Lands</td></tr><tr><td style="text-align: center;"><img src="legend/Regions_v1_0_SaltMarshes39.png" /></td><td>Salt Marshes</td></tr><tr><td style="text-align: center;"><img src="legend/Regions_v1_0_Sheogorad40.png" /></td><td>Sheogorad</td></tr><tr><td style="text-align: center;"><img src="legend/Regions_v1_0_ShipalShin41.png" /></td><td>Shipal Shin</td></tr><tr><td style="text-align: center;"><img src="legend/Regions_v1_0_SolitudeForest42.png" /></td><td>Solitude Forest</td></tr><tr><td style="text-align: center;"><img src="legend/Regions_v1_0_Soluthis43.png" /></td><td>Soluthis</td></tr><tr><td style="text-align: center;"><img src="legend/Regions_v1_0_SunderedHills44.png" /></td><td>Sundered Hills</td></tr><tr><td style="text-align: center;"><img src="legend/Regions_v1_0_SunderedScar45.png" /></td><td>Sundered Scar</td></tr><tr><td style="text-align: center;"><img src="legend/Regions_v1_0_ThirrValley46.png" /></td><td>Thirr Valley</td></tr><tr><td style="text-align: center;"><img src="legend/Regions_v1_0_Thirsk47.png" /></td><td>Thirsk</td></tr><tr><td style="text-align: center;"><img src="legend/Regions_v1_0_UldVraech48.png" /></td><td>Uld Vraech</td></tr><tr><td style="text-align: center;"><img src="legend/Regions_v1_0_ValstaahHighlands49.png" /></td><td>Valstaah Highlands</td></tr><tr><td style="text-align: center;"><img src="legend/Regions_v1_0_VelothiMountains50.png" /></td><td>Velothi Mountains</td></tr><tr><td style="text-align: center;"><img src="legend/Regions_v1_0_WestGash51.png" /></td><td>West Gash</td></tr><tr><td style="text-align: center;"><img src="legend/Regions_v1_0_StirkIsles52.png" /></td><td>Stirk Isles</td></tr><tr><td style="text-align: center;"><img src="legend/Regions_v1_0_AranyonPass53.png" /></td><td>Aranyon Pass</td></tr><tr><td style="text-align: center;"><img src="legend/Regions_v1_0_TelvanniIsles54.png" /></td><td>Telvanni Isles</td></tr><tr><td style="text-align: center;"><img src="legend/Regions_v1_0_PadomaicOcean55.png" /></td><td>Padomaic Ocean</td></tr><tr><td style="text-align: center;"><img src="legend/Regions_v1_0_SeaofGhosts56.png" /></td><td>Sea of Ghosts</td></tr><tr><td style="text-align: center;"><img src="legend/Regions_v1_0_Mudflats57.png" /></td><td>Mudflats</td></tr><tr><td style="text-align: center;"><img src="legend/Regions_v1_0_AscadianBluffs58.png" /></td><td>Ascadian Bluffs</td></tr><tr><td style="text-align: center;"><img src="legend/Regions_v1_0_GoldCoast59.png" /></td><td>Gold Coast</td></tr><tr><td style="text-align: center;"><img src="legend/Regions_v1_0_60.png" /></td><td></td></tr></table>': layer_Regions_v1_0,}).addTo(map);
+        setBounds();
+        map.addControl(new L.Control.Search({
+            layer: layer_Regions_v1_0,
+            initial: false,
+            hideMarkerOnCollapse: true,
+            propertyName: 'Region'}));
+        document.getElementsByClassName('search-button')[0].className +=
+         ' fa fa-binoculars';
+        var mapDiv = document.getElementById('map');
+        var row = document.createElement('div');
+        row.className="row";
+        row.id="all";
+        row.style.height = "100%";
+        var col1 = document.createElement('div');
+        col1.className="col9";
+        col1.id = "mapWindow";
+        col1.style.height = "99%";
+        col1.style.width = "80%";
+        col1.style.display = "inline-block";
+        var col2 = document.createElement('div');
+        col2.className="col3";
+        col2.id = "menu";
+        col2.style.display = "inline-block";
+        mapDiv.parentNode.insertBefore(row, mapDiv);
+        document.getElementById("all").appendChild(col1);
+        document.getElementById("all").appendChild(col2);
+        col1.appendChild(mapDiv)
+        var Filters = {"Province": "str","Origin": "str","Status": "str"};
+        function filterFunc() {
+          map.eachLayer(function(lyr){
+          if ("options" in lyr && "dataVar" in lyr["options"]){
+            features = this[lyr["options"]["dataVar"]].features.slice(0);
+            try{
+              for (key in Filters){
+                keyS = key.replace(/[^a-zA-Z0-9_]/g, "")
+                if (Filters[key] == "str" || Filters[key] == "bool"){
+                  var selection = [];
+                  var options = document.getElementById("sel_" + keyS).options
+                  for (var i=0; i < options.length; i++) {
+                    if (options[i].selected) selection.push(options[i].value);
+                  }
+                    try{
+                      if (key in features[0].properties){
+                        for (i = features.length - 1;
+                          i >= 0; --i){
+                          if (selection.indexOf(
+                          features[i].properties[key])<0
+                          && selection.length>0) {
+                          features.splice(i,1);
+                          }
+                        }
+                      }
+                    } catch(err){
+                  }
+                }
+                if (Filters[key] == "int"){
+                  sliderVals =  document.getElementById(
+                    "div_" + keyS).noUiSlider.get();
+                  try{
+                    if (key in features[0].properties){
+                    for (i = features.length - 1; i >= 0; --i){
+                      if (parseInt(features[i].properties[key])
+                          < sliderVals[0]
+                          || parseInt(features[i].properties[key])
+                          > sliderVals[1]){
+                            features.splice(i,1);
+                          }
+                        }
+                      }
+                    } catch(err){
+                    }
+                  }
+                if (Filters[key] == "real"){
+                  sliderVals =  document.getElementById(
+                    "div_" + keyS).noUiSlider.get();
+                  try{
+                    if (key in features[0].properties){
+                    for (i = features.length - 1; i >= 0; --i){
+                      if (features[i].properties[key]
+                          < sliderVals[0]
+                          || features[i].properties[key]
+                          > sliderVals[1]){
+                            features.splice(i,1);
+                          }
+                        }
+                      }
+                    } catch(err){
+                    }
+                  }
+                if (Filters[key] == "date"
+                  || Filters[key] == "datetime"
+                  || Filters[key] == "time"){
+                  try{
+                    if (key in features[0].properties){
+                      HTMLkey = key.replace(/[&\/\\#,+()$~%.'":*?<>{} ]/g, '');
+                      startdate = document.getElementById("dat_" +
+                        HTMLkey + "_date1").value.replace(" ", "T");
+                      enddate = document.getElementById("dat_" +
+                        HTMLkey + "_date2").value.replace(" ", "T");
+                      for (i = features.length - 1; i >= 0; --i){
+                        if (features[i].properties[key] < startdate
+                          || features[i].properties[key] > enddate){
+                          features.splice(i,1);
+                        }
+                      }
+                    }
+                  } catch(err){
+                  }
+                }
+              }
+            } catch(err){
+            }
+          this[lyr["options"]["layerName"]].clearLayers();
+          this[lyr["options"]["layerName"]].addData(features);
+          }
+          })
+        }
+            document.getElementById("menu").appendChild(
+                document.createElement("div"));
+            var div_Province = document.createElement('div');
+            div_Province.id = "div_Province";
+            div_Province.className= "filterselect";
+            document.getElementById("menu").appendChild(div_Province);
+            sel_Province = document.createElement('select');
+            sel_Province.multiple = true;
+            sel_Province.size = 5;
+            sel_Province.id = "sel_Province";
+            var Province_options_str = "<option value='' unselected></option>";
+            sel_Province.onchange = function(){filterFunc()};
+            Province_options_str  += '<option value="NULL">NULL</option>';
+            Province_options_str  += '<option value="Cyrodiil">Cyrodiil</option>';
+            Province_options_str  += '<option value="Morrowind">Morrowind</option>';
+            Province_options_str  += '<option value="Skyrim">Skyrim</option>';
+            Province_options_str  += '<option value="Solstheim">Solstheim</option>';
+            sel_Province.innerHTML = Province_options_str;
+            div_Province.appendChild(sel_Province);
+            var lab_Province = document.createElement('div');
+            lab_Province.innerHTML = 'Province';
+            lab_Province.className = 'filterlabel';
+            div_Province.appendChild(lab_Province);
+            var reset_Province = document.createElement('div');
+            reset_Province.innerHTML = 'clear filter';
+            reset_Province.className = 'filterlabel';
+            reset_Province.onclick = function() {
+                var options = document.getElementById("sel_Province").options;
+                for (var i=0; i < options.length; i++) {
+                    options[i].selected = false;
+                }
+                filterFunc();
+            };
+            div_Province.appendChild(reset_Province);
+            document.getElementById("menu").appendChild(
+                document.createElement("div"));
+            var div_Origin = document.createElement('div');
+            div_Origin.id = "div_Origin";
+            div_Origin.className= "filterselect";
+            document.getElementById("menu").appendChild(div_Origin);
+            sel_Origin = document.createElement('select');
+            sel_Origin.multiple = true;
+            sel_Origin.size = 7;
+            sel_Origin.id = "sel_Origin";
+            var Origin_options_str = "<option value='' unselected></option>";
+            sel_Origin.onchange = function(){filterFunc()};
+            Origin_options_str  += '<option value="NULL">NULL</option>';
+            Origin_options_str  += '<option value="Province Cyrodiil">Province Cyrodiil</option>';
+            Origin_options_str  += '<option value="Siege at Firemoth">Siege at Firemoth</option>';
+            Origin_options_str  += '<option value="Skyrim Home of the Nords">Skyrim Home of the Nords</option>';
+            Origin_options_str  += '<option value="Solstheim Tomb of the Snow Prince">Solstheim Tomb of the Snow Prince</option>';
+            Origin_options_str  += '<option value="Tamriel Rebuilt">Tamriel Rebuilt</option>';
+            Origin_options_str  += '<option value="TesIII Morrowind">TesIII Morrowind</option>';
+            sel_Origin.innerHTML = Origin_options_str;
+            div_Origin.appendChild(sel_Origin);
+            var lab_Origin = document.createElement('div');
+            lab_Origin.innerHTML = 'Origin';
+            lab_Origin.className = 'filterlabel';
+            div_Origin.appendChild(lab_Origin);
+            var reset_Origin = document.createElement('div');
+            reset_Origin.innerHTML = 'clear filter';
+            reset_Origin.className = 'filterlabel';
+            reset_Origin.onclick = function() {
+                var options = document.getElementById("sel_Origin").options;
+                for (var i=0; i < options.length; i++) {
+                    options[i].selected = false;
+                }
+                filterFunc();
+            };
+            div_Origin.appendChild(reset_Origin);
+            document.getElementById("menu").appendChild(
+                document.createElement("div"));
+            var div_Status = document.createElement('div');
+            div_Status.id = "div_Status";
+            div_Status.className= "filterselect";
+            document.getElementById("menu").appendChild(div_Status);
+            sel_Status = document.createElement('select');
+            sel_Status.multiple = true;
+            sel_Status.size = 2;
+            sel_Status.id = "sel_Status";
+            var Status_options_str = "<option value='' unselected></option>";
+            sel_Status.onchange = function(){filterFunc()};
+            Status_options_str  += '<option value="NULL">NULL</option>';
+            Status_options_str  += '<option value="Complete">Complete</option>';
+            sel_Status.innerHTML = Status_options_str;
+            div_Status.appendChild(sel_Status);
+            var lab_Status = document.createElement('div');
+            lab_Status.innerHTML = 'Status';
+            lab_Status.className = 'filterlabel';
+            div_Status.appendChild(lab_Status);
+            var reset_Status = document.createElement('div');
+            reset_Status.innerHTML = 'clear filter';
+            reset_Status.className = 'filterlabel';
+            reset_Status.onclick = function() {
+                var options = document.getElementById("sel_Status").options;
+                for (var i=0; i < options.length; i++) {
+                    options[i].selected = false;
+                }
+                filterFunc();
+            };
+            div_Status.appendChild(reset_Status);
+        </script>
+    </body>
+</html>
